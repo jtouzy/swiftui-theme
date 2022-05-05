@@ -40,3 +40,32 @@ extension View {
     modifier(viewModifier)
   }
 }
+
+// ========================================================================
+// MARK: Default text modifier for ready-to-use SDK
+// ========================================================================
+
+public struct DefaultTextViewModifier: ViewModifier {
+  let theme: Theme
+  let font: Theme.FontKey
+  let textStyle: Font.TextStyle
+  let foregroundColor: Theme.ColorKey?
+
+  public init(
+    theme: Theme,
+    font: Theme.FontKey = .default,
+    textStyle: Font.TextStyle = .body,
+    foregroundColor: Theme.ColorKey? = .none
+  ) {
+    self.theme = theme
+    self.font = font
+    self.textStyle = textStyle
+    self.foregroundColor = foregroundColor
+  }
+
+  public func body(content: Content) -> some View {
+    content
+      .font(theme.font(font, style: textStyle))
+      .foregroundColor(foregroundColor.map { theme.color($0) } ?? .none)
+  }
+}

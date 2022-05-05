@@ -19,16 +19,18 @@ extension Theme {
   }
 }
 
+extension Theme.FontKey {
+  public static let `default`: Self = "San Francisco"
+}
+
 extension Theme {
   public func font(
     _ key: FontKey,
-    style: Font.TextStyle,
-    weight: Font.Weight? = .none
+    style: Font.TextStyle
   ) -> Font {
     fontManager.font(
       key: key,
-      style: style,
-      weight: weight
+      style: style
     )
   }
 }
@@ -38,13 +40,11 @@ extension Theme {
   public func uiFont(
     _ key: FontKey,
     style: UIFont.TextStyle,
-    weight: UIFont.Weight? = .none,
     handlesAccessibility: Bool = true
   ) -> UIFont? {
     fontManager.uiFont(
       key: key,
       style: style,
-      weight: weight,
       handlesAccessibility: handlesAccessibility
     )
   }
