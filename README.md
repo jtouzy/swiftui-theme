@@ -27,7 +27,7 @@ struct Demo: View {
 ```
 
 * [Motivations](README.md#Motivations)
-* [Make your own Design System - The steps](README.md#Make-Your-Own-Design-System-The-Steps)
+* [Make your own Design System](README.md#Make-Your-Own-Design-System)
 * [A note on custom Fonts](README.md#A-Note-On-Custom-Fonts)
 
 ## Motivations
@@ -36,7 +36,7 @@ Mainly, because :
 * Who does not want to share & reuse styles accross multiple views for SwiftUI components ?
 * Who does not want to have a unified API, Vanilla SwiftUI-like, to handle styles the same way on any component ?
 
-## Make your own Design System - The steps
+## Make your own Design System
 
 For some examples, you can check the [Examples](Examples) folder.
 
