@@ -131,3 +131,9 @@ The library will search for a `Roboto.plist` (if you font key is called `Roboto`
 ```
 
 You can find a [full example](Examples/Fonts/Roboto/Roboto.plist) of custom font mapping in the Examples app.
+
+## Feedbacks
+
+Feedbacks & community participation is appreciated.
+
+Feel free to open an issue or a pull request to improve SwiftUITheme.
