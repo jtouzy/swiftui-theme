@@ -33,7 +33,7 @@ struct Demo: View {
 
 ## Motivations
 
-Developers do not like wasting time on repetitive, time-consuming tasks: for instance, implementing the same UI components again and again. This can be solved with a proper component librar, which will maintain consistency across the product and enhance code reusability and a result, development efficiency.
+Developers do not like wasting time on repetitive, time-consuming tasks: for instance, implementing the same UI components again and again. This can be solved with a proper component library, which will maintain consistency across the product and enhance code reusability and a result, development efficiency.
 
 SwiftUI allows us to do it with basic components: APIs like `buttonStyle` allow us to define custom implementations of the `ButtonStyle` protocol. And since iOS15, Apple introduced static accessors to define custom styles, such as `buttonStyle(.rounded)`.
 
