@@ -4,7 +4,7 @@
 
 🎨 Easy, unified & extensible theming framework for SwiftUI apps.
 
-Nothing speaks better than a quick demo :
+A quick demo is worth 1.000 words:
 
 ```swift
 import SwiftUITheme
@@ -33,9 +33,11 @@ struct Demo: View {
 
 ## Motivations
 
-Every app developer wants to not lose time designing an app. Once a component design is defined, it's a time-gainer to reuse it everywhere in the app. SwiftUI allows us to do it with basic components : APIs like `buttonStyle` allows us to define custom implementations of `ButtonStyle` protocol. And since iOS15, Apple introduced static accessors to define custom styles, such as `buttonStyle(.rounded)`.
+Developers do not like wasting time on repetitive, time-consuming tasks: for instance, implementing the same UI components again and again. This can be solved with a proper component librar, which will maintain consistency across the product and enhance code reusability and a result, development efficiency.
 
-This library is widely inspired by those concepts, but allows developers to define styles on every components (even those which miss some native API for styling), in a grouped way, using a `Theme`. Colors, Fonts, Modifiers, everything is in a single place : Your own design system definition.
+SwiftUI allows us to do it with basic components: APIs like `buttonStyle` allow us to define custom implementations of the `ButtonStyle` protocol. And since iOS15, Apple introduced static accessors to define custom styles, such as `buttonStyle(.rounded)`.
+
+This library is widely inspired by those concepts, but allows developers to define styles on every component (even those which miss some native API for styling), in a grouped way, using a `Theme`. Colors, Fonts, Modifiers, everything is in a single place: your own design system definition.
 
 Let's talk about that.
 
@@ -45,7 +47,7 @@ For some more detailed examples, you can check the [Examples](Examples) folder.
 
 ### Define your colors
 
-SwiftUITheme handle colors using named colors from `.xcassets` files. You need to define **Color Keys** for accessing your colors. Color keys are entirely free to define, you can define every name you want, and you will get build-time checkings for color names.
+SwiftUITheme handle colors using named colors from `.xcassets` files. You need to define **Color Keys** for accessing your colors. Color keys are entirely free to define, you can define every name you want, and you will get build-time checks for color names.
 
 ```swift
 extension Theme.ColorKey {
@@ -55,7 +57,7 @@ extension Theme.ColorKey {
 }
 ```
 
-For better naming, we recommend you to use pre-defined color systems, like [Material Color System](https://material.io/design/color/the-color-system.html).
+For better naming, we recommend you to use predefined color systems, like [Material Color System](https://material.io/design/color/the-color-system.html).
 
 To increase development speed and reduce common errors, you can use tools like [SwiftGen](https://github.com/SwiftGen/SwiftGen) to automatically generate your color keys from your asset catalogs.
 
@@ -99,12 +101,12 @@ struct Demo: View {
 
 Custom fonts can be used with `swift-theme`. In parallel, we encourage the use of Dynamic Type for better Accessibility. From scratch, it can be complex to use custom fonts with dynamic type in SwiftUI. `swiftui-theme` embed some tools to help you define Dynamic Type using your custom fonts.
 
-The implementation of all those tools is widely inspired by [this UseYourLoad article](https://useyourloaf.com/blog/scaling-custom-swiftui-fonts-with-dynamic-type/
+The implementation of all those tools is widely inspired by [this UseYourLoaf article](https://useyourloaf.com/blog/scaling-custom-swiftui-fonts-with-dynamic-type/
 ).
 
 ### Don't need to register custom fonts in Info.plist
 
-`SwiftUITheme` will automatically load your custom fonts if you give to your `Theme` custom font keys.
+`SwiftUITheme` will automatically load your custom fonts if you give custom font keys to your `Theme`.
 
 ```swift
 extension Theme.FontKey {
@@ -117,7 +119,7 @@ let theme: Theme = .init(registeringFontKeys: [.primary])
 
 ### Make your custom font / dynamic type association
 
-The library will search for a `Roboto.plist` (if you font key is called `Roboto`) file to get the Dynamic Type mapping. If it's provided correctly, dynamic type will be automatically applied when you use this font.
+The library will search for a `Roboto.plist` (if you font key is called `Roboto`) file to get the Dynamic Type mapping. If it is provided correctly, dynamic type will be automatically applied when you use this font.
 
 ```xml
 <!-- Example of large title definition -->
