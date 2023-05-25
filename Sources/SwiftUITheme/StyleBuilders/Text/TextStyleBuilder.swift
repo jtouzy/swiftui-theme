@@ -9,10 +9,10 @@ import SwiftUI
 public struct TextStyleBuilder<ColorKey: Hashable, FontKey: Hashable, VM: ViewModifier> {
   public typealias BuildStyle = (Theme<ColorKey, FontKey>) -> VM
 
-  public let buildStyle: BuildStyle
+  let buildStyle: BuildStyle
 
-  public init(buildStyle: @escaping BuildStyle) {
-    self.buildStyle = buildStyle
+  public static func buildStyle(_ buildStyle: @escaping BuildStyle) -> Self {
+    .init(buildStyle: buildStyle)
   }
 }
 

@@ -7,7 +7,7 @@ extension TextStyleBuilder where VM == DefaultTextStyleModifier<ColorKey, FontKe
     weight fontWeight: Font.Weight? = .none,
     foregroundColorKey: ColorKey? = .none
   ) -> Self {
-    .init { theme in
+    .buildStyle { theme in
       DefaultTextStyleModifier(
         theme: theme,
         configuration: .init(
@@ -26,7 +26,7 @@ extension TextStyleBuilder where FontKey == SystemFont, VM == DefaultTextStyleMo
     weight fontWeight: Font.Weight? = .none,
     foregroundColorKey: ColorKey? = .none
   ) -> Self {
-    .init { theme in
+    .buildStyle { theme in
       DefaultTextStyleModifier(
         theme: theme,
         configuration: .init(
