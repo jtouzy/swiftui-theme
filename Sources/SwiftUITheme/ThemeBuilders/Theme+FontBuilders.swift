@@ -1,34 +1,5 @@
 import SwiftUI
 
-// MARK: Build static functions
-
-extension Theme {
-  public static func build<ColorKey, FontKey>() -> Theme<ColorKey, FontKey>
-  where ColorKey: CaseIterable & ColorProvider, FontKey: CaseIterable & FontProvider {
-    build(colorKeys: Array(ColorKey.allCases), fontKeys: Array(FontKey.allCases))
-  }
-  public static func build<ColorKey, FontKey>(colorKeys: [ColorKey], fontKeys: [FontKey]) -> Theme<ColorKey, FontKey>
-  where ColorKey: ColorProvider, FontKey: FontProvider {
-    .init(colors: colorKeys.reduce(into: [:], { $0[$1] = $1.color }), fonts: loadAllFontDescriptors(from: fontKeys))
-  }
-}
-
-// MARK: Colors management
-
-public protocol ColorProvider {
-  var bundle: Bundle { get }
-  var color: SwiftUI.Color { get }
-}
-
-public extension ColorProvider {
-  var bundle: Bundle { .main }
-}
-public extension ColorProvider where Self: RawRepresentable, RawValue == String {
-  var color: SwiftUI.Color { .init(rawValue, bundle: bundle) }
-}
-
-// MARK: Fonts management
-
 public protocol FontProvider {
   var bundle: Bundle { get }
   var fontDescriptorFileName: String { get }
@@ -37,6 +8,7 @@ public protocol FontProvider {
 public extension FontProvider {
   var bundle: Bundle { .main }
 }
+
 public extension FontProvider where Self: RawRepresentable, RawValue == String {
   var fontDescriptorFileName: String { rawValue }
 }
@@ -55,7 +27,7 @@ internal enum FontDescriptorPropertyList {
   }
 }
 
-private func loadAllFontDescriptors<FontKey>(from providers: [FontKey]) -> [FontKey: FontDescriptor]
+internal func loadAllFontDescriptors<FontKey>(from providers: [FontKey]) -> [FontKey: FontDescriptor]
 where FontKey: FontProvider {
   let propertyListDecoder = PropertyListDecoder()
   let fontDescriptors: [FontKey: FontDescriptor] = providers.reduce(into: [:]) { finalDictionary, fontProvider in
