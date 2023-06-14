@@ -6,8 +6,10 @@ import SwiftUI
 // It's only a factory function for building your style class from the given theme.
 // ========================================================================
 
-public struct TextStyleBuilder<ColorKey: Hashable, FontKey: Hashable, VM: ViewModifier> {
-  public typealias BuildStyle = (Theme<ColorKey, FontKey>) -> VM
+public struct TextStyleBuilder<
+  ColorKey: Hashable, FontKey: Hashable, SpacingKey: Hashable, VM: ViewModifier
+> {
+  public typealias BuildStyle = (Theme<ColorKey, FontKey, SpacingKey>) -> VM
 
   let buildStyle: BuildStyle
 
@@ -25,7 +27,7 @@ extension Theme {
   /// Theme-styled Text API.
   /// - Parameter builder: Builder used to construct the related text ViewModifier.
   /// - Returns: A ViewModifier created based on the builder definition.
-  public func text<VM: ViewModifier>(_ builder: TextStyleBuilder<ColorKey, FontKey, VM>) -> VM {
+  public func text<VM: ViewModifier>(_ builder: TextStyleBuilder<ColorKey, FontKey, SpacingKey, VM>) -> VM {
     builder.buildStyle(self)
   }
 }

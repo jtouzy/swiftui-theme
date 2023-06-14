@@ -6,8 +6,10 @@ import SwiftUI
 // It's only a factory function for building your style class from the given theme.
 // ========================================================================
 
-public struct ButtonStyleBuilder<ColorKey: Hashable, FontKey: Hashable, BS: ButtonStyle> {
-  public typealias BuildStyle = (Theme<ColorKey, FontKey>) -> BS
+public struct ButtonStyleBuilder<
+  ColorKey: Hashable, FontKey: Hashable, SpacingKey: Hashable, BS: ButtonStyle
+> {
+  public typealias BuildStyle = (Theme<ColorKey, FontKey, SpacingKey>) -> BS
 
   let buildStyle: BuildStyle
 
@@ -25,7 +27,8 @@ extension Theme {
   /// Theme-styled Button API.
   /// - Parameter builder: Builder used to construct the related ButtonStyle.
   /// - Returns: A ButtonStyle created based on the builder definition.
-  public func button<BS>(_ builder: ButtonStyleBuilder<ColorKey, FontKey, BS>) -> BS where BS: ButtonStyle {
+  public func button<BS>(_ builder: ButtonStyleBuilder<ColorKey, FontKey, SpacingKey, BS>) -> BS
+  where BS: ButtonStyle {
     builder.buildStyle(self)
   }
 }

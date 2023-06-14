@@ -1,6 +1,7 @@
 import SwiftUI
 
-extension TextStyleBuilder where VM == DefaultTextStyleModifier<ColorKey, FontKey> {
+extension TextStyleBuilder
+where VM == DefaultTextStyleModifier<ColorKey, FontKey, SpacingKey> {
   public static func styled(
     font fontKey: FontKey? = .none,
     as fontTextStyle: Font.TextStyle = .body,
@@ -20,7 +21,8 @@ extension TextStyleBuilder where VM == DefaultTextStyleModifier<ColorKey, FontKe
     }
   }
 }
-extension TextStyleBuilder where FontKey == SystemFont, VM == DefaultTextStyleModifier<ColorKey, SystemFont> {
+extension TextStyleBuilder
+where FontKey == SystemFont, VM == DefaultTextStyleModifier<ColorKey, SystemFont, SpacingKey> {
   public static func styled(
     as fontTextStyle: Font.TextStyle = .body,
     weight fontWeight: Font.Weight? = .none,
@@ -40,14 +42,14 @@ extension TextStyleBuilder where FontKey == SystemFont, VM == DefaultTextStyleMo
   }
 }
 
-public struct DefaultTextStyleModifier<ColorKey: Hashable, FontKey: Hashable>: ViewModifier {
+public struct DefaultTextStyleModifier<ColorKey: Hashable, FontKey: Hashable, SpacingKey: Hashable>: ViewModifier {
   public struct Configuration {
     let fontKey: FontKey?
     let fontTextStyle: Font.TextStyle?
     let fontWeight: Font.Weight?
     let foregroundColorKey: ColorKey?
     
-    func evaluateFont(using theme: Theme<ColorKey, FontKey>) -> Font? {
+    func evaluateFont(using theme: Theme<ColorKey, FontKey, SpacingKey>) -> Font? {
       guard let fontKey, let fontTextStyle else {
         return nil
       }
@@ -55,10 +57,10 @@ public struct DefaultTextStyleModifier<ColorKey: Hashable, FontKey: Hashable>: V
     }
   }
 
-  let theme: Theme<ColorKey, FontKey>
+  let theme: Theme<ColorKey, FontKey, SpacingKey>
   let configuration: Configuration
 
-  init(theme: Theme<ColorKey, FontKey>, configuration: Configuration) {
+  init(theme: Theme<ColorKey, FontKey, SpacingKey>, configuration: Configuration) {
     self.theme = theme
     self.configuration = configuration
   }
