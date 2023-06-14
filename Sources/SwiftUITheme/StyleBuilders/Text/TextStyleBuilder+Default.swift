@@ -1,12 +1,16 @@
 import SwiftUI
 
 extension TextStyleBuilder
-where VM == DefaultTextStyleModifier<ColorKey, FontKey, Geometry> {
+where VM == DefaultTextStyleModifier<Color, FontKey, Geometry> {
   public static func styled(
     font fontKey: FontKey? = .none,
     as fontTextStyle: Font.TextStyle = .body,
     weight fontWeight: Font.Weight? = .none,
-    foregroundColorKey: ColorKey? = .none
+    foregroundColorKey: Color? = .none,
+    backgroundColorKey: Color? = .none,
+    textCase: Text.Case? = .none,
+    isUnderlined: Bool = false,
+    isStrikethrough: Bool = false
   ) -> Self {
     .buildStyle { theme in
       DefaultTextStyleModifier(
@@ -15,18 +19,26 @@ where VM == DefaultTextStyleModifier<ColorKey, FontKey, Geometry> {
           fontKey: fontKey,
           fontTextStyle: fontTextStyle,
           fontWeight: fontWeight,
-          foregroundColorKey: foregroundColorKey
+          foregroundColorKey: foregroundColorKey,
+          backgroundColorKey: backgroundColorKey,
+          textCase: textCase,
+          isUnderlined: isUnderlined,
+          isStrikethrough: isStrikethrough
         )
       )
     }
   }
 }
 extension TextStyleBuilder
-where FontKey == SystemFont, VM == DefaultTextStyleModifier<ColorKey, SystemFont, Geometry> {
+where FontKey == SystemFont, VM == DefaultTextStyleModifier<Color, SystemFont, Geometry> {
   public static func styled(
     as fontTextStyle: Font.TextStyle = .body,
     weight fontWeight: Font.Weight? = .none,
-    foregroundColorKey: ColorKey? = .none
+    foregroundColorKey: Color? = .none,
+    backgroundColorKey: Color? = .none,
+    textCase: Text.Case? = .none,
+    isUnderlined: Bool = false,
+    isStrikethrough: Bool = false
   ) -> Self {
     .buildStyle { theme in
       DefaultTextStyleModifier(
@@ -35,7 +47,11 @@ where FontKey == SystemFont, VM == DefaultTextStyleModifier<ColorKey, SystemFont
           fontKey: .system,
           fontTextStyle: fontTextStyle,
           fontWeight: fontWeight,
-          foregroundColorKey: foregroundColorKey
+          foregroundColorKey: foregroundColorKey,
+          backgroundColorKey: backgroundColorKey,
+          textCase: textCase,
+          isUnderlined: isUnderlined,
+          isStrikethrough: isStrikethrough
         )
       )
     }
@@ -43,15 +59,19 @@ where FontKey == SystemFont, VM == DefaultTextStyleModifier<ColorKey, SystemFont
 }
 
 public struct DefaultTextStyleModifier<
-  ColorKey: Hashable, FontKey: Hashable, Geometry: GeometryProvider
+  Color: ColorProvider, FontKey: Hashable, Geometry: GeometryProvider
 >: ViewModifier {
   public struct Configuration {
     let fontKey: FontKey?
     let fontTextStyle: Font.TextStyle?
     let fontWeight: Font.Weight?
-    let foregroundColorKey: ColorKey?
+    let foregroundColorKey: Color?
+    let backgroundColorKey: Color?
+    let textCase: Text.Case?
+    let isUnderlined: Bool
+    let isStrikethrough: Bool
     
-    func evaluateFont(using theme: Theme<ColorKey, FontKey, Geometry>) -> Font? {
+    func evaluateFont(using theme: Theme<Color, FontKey, Geometry>) -> Font? {
       guard let fontKey, let fontTextStyle else {
         return nil
       }
@@ -59,10 +79,10 @@ public struct DefaultTextStyleModifier<
     }
   }
 
-  let theme: Theme<ColorKey, FontKey, Geometry>
+  let theme: Theme<Color, FontKey, Geometry>
   let configuration: Configuration
 
-  init(theme: Theme<ColorKey, FontKey, Geometry>, configuration: Configuration) {
+  init(theme: Theme<Color, FontKey, Geometry>, configuration: Configuration) {
     self.theme = theme
     self.configuration = configuration
   }
@@ -70,7 +90,10 @@ public struct DefaultTextStyleModifier<
   public func body(content: Content) -> some View {
     let base = baseContent(from: content)
     if #available(iOS 16.0, *) {
-      base.fontWeight(configuration.fontWeight)
+      base
+        .fontWeight(configuration.fontWeight)
+        .underline(configuration.isUnderlined)
+        .strikethrough(configuration.isStrikethrough)
     } else {
       base
     }
@@ -81,5 +104,7 @@ public struct DefaultTextStyleModifier<
     content
       .font(configuration.evaluateFont(using: theme))
       .foregroundColor(configuration.foregroundColorKey.flatMap(theme.color(_:)))
+      .textCase(configuration.textCase)
+      .background(configuration.backgroundColorKey.flatMap(theme.color(_:)))
   }
 }

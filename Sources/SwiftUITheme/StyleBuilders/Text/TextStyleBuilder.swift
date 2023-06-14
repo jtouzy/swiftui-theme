@@ -7,9 +7,9 @@ import SwiftUI
 // ========================================================================
 
 public struct TextStyleBuilder<
-  ColorKey: Hashable, FontKey: Hashable, Geometry: GeometryProvider, VM: ViewModifier
+  Color: ColorProvider, FontKey: Hashable, Geometry: GeometryProvider, VM: ViewModifier
 > {
-  public typealias BuildStyle = (Theme<ColorKey, FontKey, Geometry>) -> VM
+  public typealias BuildStyle = (Theme<Color, FontKey, Geometry>) -> VM
 
   let buildStyle: BuildStyle
 
@@ -27,7 +27,7 @@ extension Theme {
   /// Theme-styled Text API.
   /// - Parameter builder: Builder used to construct the related text ViewModifier.
   /// - Returns: A ViewModifier created based on the builder definition.
-  public func text<VM: ViewModifier>(_ builder: TextStyleBuilder<ColorKey, FontKey, Geometry, VM>) -> VM {
+  public func text<VM: ViewModifier>(_ builder: TextStyleBuilder<Color, FontKey, Geometry, VM>) -> VM {
     builder.buildStyle(self)
   }
 }

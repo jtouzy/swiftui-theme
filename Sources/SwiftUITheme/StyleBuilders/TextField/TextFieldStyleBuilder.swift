@@ -7,9 +7,9 @@ import SwiftUI
 // ========================================================================
 
 public struct TextFieldStyleBuilder<
-  ColorKey: Hashable, FontKey: Hashable, Geometry: GeometryProvider, TFS: TextFieldStyle
+  Color: ColorProvider, FontKey: Hashable, Geometry: GeometryProvider, TFS: TextFieldStyle
 > {
-  public typealias BuildStyle = (Theme<ColorKey, FontKey, Geometry>) -> TFS
+  public typealias BuildStyle = (Theme<Color, FontKey, Geometry>) -> TFS
 
   let buildStyle: BuildStyle
 
@@ -27,7 +27,7 @@ extension Theme {
   /// Theme-styled Button API.
   /// - Parameter builder: Builder used to construct the related ButtonStyle.
   /// - Returns: A ButtonStyle created based on the builder definition.
-  public func textField<T>(_ builder: TextFieldStyleBuilder<ColorKey, FontKey, Geometry, T>) -> T
+  public func textField<T>(_ builder: TextFieldStyleBuilder<Color, FontKey, Geometry, T>) -> T
   where T: TextFieldStyle {
     builder.buildStyle(self)
   }
