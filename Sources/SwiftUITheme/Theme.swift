@@ -1,6 +1,6 @@
 import SwiftUI
 
-public final class Theme<Color: ColorProvider, FontKey: Hashable, Geometry: GeometryProvider>: ObservableObject {
+public final class Theme<Color: ColorProvider, FontKey: Hashable, Constant: ConstantProvider>: ObservableObject {
   internal var fonts: [FontKey: FontDescriptor]
 
   internal init(fonts: [FontKey: FontDescriptor]) {
@@ -18,7 +18,7 @@ extension Theme {
   public func font(_ fontKey: FontKey, as textStyle: Font.TextStyle, weight: Font.Weight) -> SwiftUI.Font? {
     fonts[fontKey]?.font(forTextStyle: textStyle, weight: weight)
   }
-  public func geometry(_ geometry: Geometry) -> CGFloat {
-    geometry.value
+  public func constant(_ constant: Constant) -> CGFloat {
+    constant.value
   }
 }

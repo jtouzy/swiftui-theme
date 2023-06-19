@@ -7,9 +7,9 @@ import SwiftUI
 // ========================================================================
 
 public struct ButtonStyleBuilder<
-  Color: ColorProvider, FontKey: Hashable, Geometry: GeometryProvider, BS: ButtonStyle
+  Color: ColorProvider, FontKey: Hashable, Constant: ConstantProvider, BS: ButtonStyle
 > {
-  public typealias BuildStyle = (Theme<Color, FontKey, Geometry>) -> BS
+  public typealias BuildStyle = (Theme<Color, FontKey, Constant>) -> BS
 
   let buildStyle: BuildStyle
 
@@ -19,16 +19,24 @@ public struct ButtonStyleBuilder<
 }
 
 // ========================================================================
-// MARK: Theme API
-// This API must be exposed to allow ButtonStyle creation based on a theme in SwiftUI views.
+// MARK: SwiftUI extension API
+// This API is used to be consistent with SwiftUI APIs
 // ========================================================================
 
-extension Theme {
-  /// Theme-styled Button API.
-  /// - Parameter builder: Builder used to construct the related ButtonStyle.
-  /// - Returns: A ButtonStyle created based on the builder definition.
-  public func button<BS>(_ builder: ButtonStyleBuilder<Color, FontKey, Geometry, BS>) -> BS
-  where BS: ButtonStyle {
-    builder.buildStyle(self)
+extension View {
+  public func buttonStyle<Color, FontKey, Constant, BS>(
+    _ builder: ButtonStyleBuilder<Color, FontKey, Constant, BS>
+  ) -> some View {
+    modifier(ButtonStyleApplierModifier(buttonStyleBuilder: builder))
+  }
+}
+
+private struct ButtonStyleApplierModifier<Color, FontKey, Constant, BS>: ViewModifier
+where Color: ColorProvider, FontKey: Hashable, Constant: ConstantProvider, BS: ButtonStyle {
+  @EnvironmentObject var theme: Theme<Color, FontKey, Constant>
+  let buttonStyleBuilder: ButtonStyleBuilder<Color, FontKey, Constant, BS>
+  
+  func body(content: Content) -> some View {
+    content.buttonStyle(buttonStyleBuilder.buildStyle(theme))
   }
 }
