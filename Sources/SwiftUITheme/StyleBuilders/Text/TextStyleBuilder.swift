@@ -42,3 +42,24 @@ extension View {
     modifier(viewModifier)
   }
 }
+
+// ========================================================================
+// MARK: SwiftUI extension API to avoid
+// This API is used to be consistent with SwiftUI APIs like ButtonStyle
+// ========================================================================
+
+extension View {
+  public func textStyle<Color, FontKey, Geometry, VM>(
+    _ builder: TextStyleBuilder<Color, FontKey, Geometry, VM>
+  ) -> some View {
+    modifier(TextStyleShortModifier(textStyleBuilder: builder))
+  }
+}
+private struct TextStyleShortModifier<Color: ColorProvider, FontKey: Hashable, Geometry: GeometryProvider, VM: ViewModifier>: ViewModifier {
+  @EnvironmentObject var theme: Theme<Color, FontKey, Geometry>
+  let textStyleBuilder: TextStyleBuilder<Color, FontKey, Geometry, VM>
+  
+  func body(content: Content) -> some View {
+    content.textStyle(theme.text(textStyleBuilder))
+  }
+}
