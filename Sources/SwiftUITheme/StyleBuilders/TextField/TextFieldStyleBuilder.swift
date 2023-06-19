@@ -7,9 +7,9 @@ import SwiftUI
 // ========================================================================
 
 public struct TextFieldStyleBuilder<
-  Color: ColorProvider, FontKey: Hashable, Geometry: GeometryProvider, TFS: TextFieldStyle
+  Color: ColorProvider, FontKey: Hashable, Constant: ConstantProvider, TFS: TextFieldStyle
 > {
-  public typealias BuildStyle = (Theme<Color, FontKey, Geometry>) -> TFS
+  public typealias BuildStyle = (Theme<Color, FontKey, Constant>) -> TFS
 
   let buildStyle: BuildStyle
 
@@ -19,16 +19,24 @@ public struct TextFieldStyleBuilder<
 }
 
 // ========================================================================
-// MARK: Theme API
-// This API must be exposed to allow TextFieldStyle creation based on a theme in SwiftUI views.
+// MARK: SwiftUI extension API
+// This API is used to be consistent with SwiftUI APIs
 // ========================================================================
 
-extension Theme {
-  /// Theme-styled Button API.
-  /// - Parameter builder: Builder used to construct the related ButtonStyle.
-  /// - Returns: A ButtonStyle created based on the builder definition.
-  public func textField<T>(_ builder: TextFieldStyleBuilder<Color, FontKey, Geometry, T>) -> T
-  where T: TextFieldStyle {
-    builder.buildStyle(self)
+extension View {
+  public func textFieldStyle<Color, FontKey, Constant, TFS>(
+    _ builder: TextFieldStyleBuilder<Color, FontKey, Constant, TFS>
+  ) -> some View {
+    modifier(TextFieldStyleApplierModifier(textFieldStyleBuilder: builder))
+  }
+}
+
+private struct TextFieldStyleApplierModifier<Color, FontKey, Constant, TFS>: ViewModifier
+where Color: ColorProvider, FontKey: Hashable, Constant: ConstantProvider, TFS: TextFieldStyle {
+  @EnvironmentObject var theme: Theme<Color, FontKey, Constant>
+  let textFieldStyleBuilder: TextFieldStyleBuilder<Color, FontKey, Constant, TFS>
+  
+  func body(content: Content) -> some View {
+    content.textFieldStyle(textFieldStyleBuilder.buildStyle(theme))
   }
 }

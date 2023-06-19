@@ -1,7 +1,7 @@
 import SwiftUI
 
 extension TextStyleBuilder
-where VM == DefaultTextStyleModifier<Color, FontKey, Geometry> {
+where VM == DefaultTextStyleModifier<Color, FontKey, Constant> {
   public static func styled(
     font fontKey: FontKey? = .none,
     as fontTextStyle: Font.TextStyle = .body,
@@ -30,7 +30,7 @@ where VM == DefaultTextStyleModifier<Color, FontKey, Geometry> {
   }
 }
 extension TextStyleBuilder
-where FontKey == SystemFont, VM == DefaultTextStyleModifier<Color, SystemFont, Geometry> {
+where FontKey == SystemFont, VM == DefaultTextStyleModifier<Color, SystemFont, Constant> {
   public static func styled(
     as fontTextStyle: Font.TextStyle = .body,
     weight fontWeight: Font.Weight? = .none,
@@ -59,7 +59,7 @@ where FontKey == SystemFont, VM == DefaultTextStyleModifier<Color, SystemFont, G
 }
 
 public struct DefaultTextStyleModifier<
-  Color: ColorProvider, FontKey: Hashable, Geometry: GeometryProvider
+  Color: ColorProvider, FontKey: Hashable, Constant: ConstantProvider
 >: ViewModifier {
   public struct Configuration {
     let fontKey: FontKey?
@@ -71,7 +71,7 @@ public struct DefaultTextStyleModifier<
     let isUnderlined: Bool
     let isStrikethrough: Bool
     
-    func evaluateFont(using theme: Theme<Color, FontKey, Geometry>) -> Font? {
+    func evaluateFont(using theme: Theme<Color, FontKey, Constant>) -> Font? {
       guard let fontKey, let fontTextStyle else {
         return nil
       }
@@ -79,10 +79,10 @@ public struct DefaultTextStyleModifier<
     }
   }
 
-  let theme: Theme<Color, FontKey, Geometry>
+  let theme: Theme<Color, FontKey, Constant>
   let configuration: Configuration
 
-  init(theme: Theme<Color, FontKey, Geometry>, configuration: Configuration) {
+  init(theme: Theme<Color, FontKey, Constant>, configuration: Configuration) {
     self.theme = theme
     self.configuration = configuration
   }
