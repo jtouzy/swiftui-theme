@@ -16,7 +16,7 @@ extension FontDescriptor {
     func font(forTextStyle textStyle: Font.TextStyle, weight: Font.Weight) -> Font {
       switch self {
       case .custom(let customFont):
-        let dynamicName = weight.evaluateFont(baseName: customFont.baseName)
+        let dynamicName = customFont.evaluateFontName(for: weight)
         return .custom(dynamicName, size: customFont.size)
       case .system:
         return .system(textStyle)
@@ -29,6 +29,15 @@ extension FontDescriptor.TextStyleVariant {
     let bundle: Bundle
     let baseName: String
     let size: CGFloat
+    let shouldEvaluateDynamicFontName: Bool
+  }
+}
+extension FontDescriptor.TextStyleVariant.CustomFont {
+  func evaluateFontName(for weight: Font.Weight) -> String {
+    guard shouldEvaluateDynamicFontName else {
+      return baseName
+    }
+    return weight.evaluateFont(baseName: baseName)
   }
 }
 
