@@ -80,6 +80,8 @@ where FontKey: FontProvider {
   return fontDescriptors
 }
 
+private let allFontExtensions = ["ttf", "otf"]
+
 private func loadDynamically(_ fontDescriptors: [FontDescriptor]) {
   fontDescriptors
     .map(\.textStyleDictionary)
@@ -91,7 +93,12 @@ private func loadDynamically(_ fontDescriptors: [FontDescriptor]) {
     .uniqued(by: \.baseName)
     .flatMap { variant in
       Font.Weight.allCases.compactMap { weight in
-        variant.bundle.url(forResource: weight.evaluateFont(baseName: variant.baseName), withExtension: "ttf")
+        allFontExtensions.reduce(nil) { result, fileExtension in
+          result ?? variant.bundle.url(
+            forResource: weight.evaluateFont(baseName: variant.baseName),
+            withExtension: fileExtension
+          )
+        }
       }
     }
     .forEach { UIFont.register(from: $0) }
