@@ -3,10 +3,12 @@ import SwiftUI
 public protocol FontProvider {
   var bundle: Bundle { get }
   var fontDescriptorFileName: String { get }
+  var shouldEvaluateDynamicFontName: Bool { get }
 }
 
 public extension FontProvider {
   var bundle: Bundle { .main }
+  var shouldEvaluateDynamicFontName: Bool { true }
 }
 
 public extension FontProvider where Self: RawRepresentable, RawValue == String {
@@ -61,7 +63,8 @@ where FontKey: FontProvider {
           .init(
             bundle: fontProvider.bundle,
             baseName: propertyListDictionaryElement.value.fontName,
-            size: propertyListDictionaryElement.value.fontSize
+            size: propertyListDictionaryElement.value.fontSize,
+            shouldEvaluateDynamicFontName: fontProvider.shouldEvaluateDynamicFontName
           )
         )
       }
