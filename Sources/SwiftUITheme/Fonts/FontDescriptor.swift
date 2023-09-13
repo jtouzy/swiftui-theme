@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct FontDescriptor {
-  let textStyleDictionary: [Font.TextStyle: TextStyleVariant]
+  let textStyleDictionary: [Font.TextStyle: TextStyleDescriptor]
   
   func font(forTextStyle textStyle: Font.TextStyle, weight: Font.Weight) -> Font? {
     textStyleDictionary[textStyle]?.font(forTextStyle: textStyle, weight: weight)
@@ -9,7 +9,7 @@ struct FontDescriptor {
 }
 
 extension FontDescriptor {
-  enum TextStyleVariant {
+  enum TextStyleDescriptor {
     case custom(CustomFont)
     case system
     
@@ -17,14 +17,14 @@ extension FontDescriptor {
       switch self {
       case .custom(let customFont):
         let dynamicName = customFont.evaluateFontName(for: weight)
-        return .custom(dynamicName, size: customFont.size)
+        return .custom(dynamicName, size: customFont.size, relativeTo: textStyle)
       case .system:
         return .system(textStyle)
       }
     }
   }
 }
-extension FontDescriptor.TextStyleVariant {
+extension FontDescriptor.TextStyleDescriptor {
   struct CustomFont {
     let bundle: Bundle
     let baseName: String
@@ -32,7 +32,7 @@ extension FontDescriptor.TextStyleVariant {
     let shouldEvaluateDynamicFontName: Bool
   }
 }
-extension FontDescriptor.TextStyleVariant.CustomFont {
+extension FontDescriptor.TextStyleDescriptor.CustomFont {
   func evaluateFontName(for weight: Font.Weight) -> String {
     guard shouldEvaluateDynamicFontName else {
       return baseName
