@@ -53,7 +53,7 @@ where FontKey: FontProvider {
         from: fontDescriptorFileData
       )
       let transformPListToTextStyleMapping: (
-        inout [Font.TextStyle: FontDescriptor.TextStyleVariant],
+        inout [Font.TextStyle: FontDescriptor.TextStyleDescriptor],
         FontDescriptorPropertyList.ByTextStyleDictionary.Element
       ) -> Void = { dictionary, propertyListDictionaryElement in
         guard let fontTextStyle = Font.TextStyle(rawValue: propertyListDictionaryElement.key) else {
@@ -86,7 +86,7 @@ private func loadDynamically(_ fontDescriptors: [FontDescriptor]) {
   fontDescriptors
     .map(\.textStyleDictionary)
     .flatMap(\.values)
-    .compactMap { variant -> FontDescriptor.TextStyleVariant.CustomFont? in
+    .compactMap { variant -> FontDescriptor.TextStyleDescriptor.CustomFont? in
       guard case .custom(let customFont) = variant else { return nil }
       return customFont
     }
